@@ -1,0 +1,8 @@
+A programming technique that my partner and I incorporated into our programming practice, and are still actively
+trying to improve on. Is abstracting a problem into smaller problems which can then be solved then put back together later on.
+For example, in our sudoku checker, we brainstormed on what components would be useful (iterators, constructors, implementions, etc),
+we then categorized what components would need to be built first in order for the other components to make sense. For example,
+a iterator is difficult to visualize if we don't even know how we will represent/construct a 2d array. While doing this, we also
+found value in unit testing or any testing in general, in order to make sure this singular component works before moving onto the next 
+component, if we were to work on several things all at once, we would encounter a slew of issues and it would be difficult to pinpoint
+what went wrong, and we would be back to where we started, having a big problem that is difficult to solve.

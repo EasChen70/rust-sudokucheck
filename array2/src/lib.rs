@@ -10,10 +10,19 @@ pub trait IterColumnMajor {
     fn iter_column_major(&self) -> Option<Self::Item>;
 }
 
-pub trait Get<T> {
-    fn get(index: (usize,usize)) -> Result<T,String>;
+
+pub trait GetC<T:Eq> {
+    ///this function needs to be called on a Vec<Vec<T>> and have a tuple of a coordinate
+/// where you can want to look for an element 
+/// It will return either Some(T) where T is the element at the coordinates 
+/// or will return None if the coordinates are out of bounds of the Vec<Vec<T>>
+    fn get_c(&self,index: (usize,usize)) -> Option<&T>;
 }
 
+
+
+///Array2 is a struct that stores the width,height,and a 1d vector 
+/// that we will represent with a 2d vector 
 pub struct Array2<T: Clone> {
     width: usize,
     height: usize,
@@ -23,11 +32,17 @@ pub struct Array2<T: Clone> {
 
 impl<T: Clone> Array2<T> {
     //Create slate Array2
+    ///You call this function with arguemnets of the imgs height and width and an element 
+    /// of the 1d vector 
+    /// this will return a struc of Array2 with data being a vector of data that you can copy over 
     pub fn new(width: usize, height: usize, default_value: T) -> Self {
         let data = vec![default_value; width * height];
         Array2 { width, height, data }
     }
     //Allows you to push in data 
+    ///You call this function with the imgs height, width, and a 1d vector that you want to represent 
+    /// It will return an Array2 struc with width, height, and a 1d vector we will represent with a 
+    /// 1d vector
     pub fn with_data(width: usize, height: usize, data: Vec<T>) -> Self {
         Array2 { width, height, data }
     }
@@ -37,6 +52,8 @@ impl<T: Clone> Array2<T> {
     }
     
     //Makes the Array2
+    ///you call this on a Array2 struct 
+    /// this will return a Vec<Vec<T>>
     pub fn from_row_major(self) -> Vec<Vec<T>> {
         let mut array: Vec<Vec<T>> = Vec::with_capacity(self.height);
         let mut hold: Vec<T> = Vec::with_capacity(self.width);
@@ -57,6 +74,18 @@ impl<T: Clone> Array2<T> {
         return array;
     }
     
+}
+
+impl<T: Eq> GetC<T> for Vec<Vec<T>> {
+    fn get_c(&self, index: (usize, usize) ) -> Option<&T> {
+        if index.0 < self.len() {
+            let row = &self[index.0];
+            if index.1 < row.len() {
+                return Some(&row[index.1]);
+            }
+        }
+        None
+    }
 }
 
 impl<T: Eq + std::hash::Hash> IterRowMajor for Vec<Vec<T>> {
@@ -132,11 +161,9 @@ mod tests {
             vec![6,7,8,9,1,2,3,4,5],
             vec![9,1,2,3,4,5,6,7,8],
         ];
-
         // Assert that the result matches the expected value
-        assert_eq!(result, expected);
+        assert_eq!(result,expected);
     }
-
 
     #[test]
     fn test_iter_row_major_no_duplicates() {
@@ -152,7 +179,7 @@ mod tests {
             vec![6,7,8,9,1,2,3,4,5],
             vec![9,1,2,3,4,5,6,7,8],
         ];
-
+        
         // Call iter_row_major and expect Some(())
         assert_eq!(data.iter_row_major(), Some(()));
     }
@@ -208,29 +235,3 @@ mod tests {
         assert_eq!(data.iter_column_major(), None);
     }
 }
-
-
-
-
-
-// impl<T: Clone> IterColumnMajor for Array2<T>{
-//     type Item = (usize,usize,T);
-//     fn iter_column_major(&self) -> Option<Self::Item>{
-//         //iterates through a 2d vector by column returning a tuple(row,column,element)
-//     }
-// }
-
-// impl<T: Clone> IterRowMajor for Array2<T>{
-//     type Item = (usize,usize,T);
-//     fn iter_row_major(&self) -> Option<Self::Item>{
-//         //iterates through a 2d vector by column returning a tuple(row,column,element)
-
-//     }
-// }
-
-// impl<T: Clone> get<T> for Array2<T>{
-//     fn get(index:(usize,usize)) -> Result<T,String>{
-//         //using the tuple, return a reference to an element in the 2d array at those cords
-
-//     }
-// }
