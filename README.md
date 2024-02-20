@@ -10,4 +10,9 @@
 ## - One thing that we probably didn't do the greatest on, was testing for performance. While with Rust, it's safe the say that the code runs pretty fast, we aren't 100% sure if our program is performing as efficiently as possible.
 
 ## Design Checklist:
-## - 
+## - We successfully implemented our constructors and iterators (specifically in keeping it as traits).
+## - We successfully implemented our desired representation of a 2D array (a vector of vectors).
+## - We took a 1D array and split it in row major order, into a 2D array to check our sudoku puzzle.
+
+## Hours Spent:
+## - 10 hours split across a few days.

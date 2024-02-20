@@ -76,6 +76,11 @@ impl<T: Clone> Array2<T> {
     
 }
 
+
+///this function needs to be called on a Vec<Vec<T>> and have a tuple of a coordinate
+/// where you can want to look for an element 
+/// It will return either Some(T) where T is the element at the coordinates 
+/// or will return None if the coordinates are out of bounds of the Vec<Vec<T>>
 impl<T: Eq> GetC<T> for Vec<Vec<T>> {
     fn get_c(&self, index: (usize, usize) ) -> Option<&T> {
         if index.0 < self.len() {
@@ -87,6 +92,9 @@ impl<T: Eq> GetC<T> for Vec<Vec<T>> {
         None
     }
 }
+
+    /// For each row, initialize a hashmap that stores unique values, and returns none if encounters a duplicate.
+    /// Return Some(()), if successfully iterates each row without finding duplicate.
 
 impl<T: Eq + std::hash::Hash> IterRowMajor for Vec<Vec<T>> {
     type Item = ();
@@ -105,6 +113,9 @@ impl<T: Eq + std::hash::Hash> IterRowMajor for Vec<Vec<T>> {
         Some(())
     }
 }
+
+    /// For each column, initialize a hashmap that stores unique values, and returns none if encounters a duplicate.
+    /// Return Some(()), if successfully iterates each column without finding duplicate
 
 impl<T: Eq + std::hash::Hash> IterColumnMajor for Vec<Vec<T>> {
     type Item = ();
